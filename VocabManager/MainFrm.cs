@@ -258,10 +258,6 @@ namespace VocabManager
         void PlayPronunciation(string text, string country)
         {
             PlayPronunciation_InNewThread(text, country);
-
-            // Bug: Main thread has to wait for subthread
-            // Thread thread = new Thread(() => DicApi.PlayPronunciation_2(text, PRONUNCIATION_COUNTRY_2.US));
-            // thread.Start(); thread.Join();
         }
 
         async void PlayPronunciation_InNewThread(string text, string country)
