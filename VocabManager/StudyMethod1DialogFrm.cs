@@ -40,10 +40,10 @@ namespace VocabManager
             PlayPronunciation(_currentWord);
 
             // Temporary way: Pre-load the next word to prevent lagging
-            if (_words.Count > _currentWordIdx + 1)
-            {
-                PreLoadPronunciation(_words[_currentWordIdx + 1]);
-            }
+            //if (_words.Count > _currentWordIdx + 1)
+            //{
+            //    PreLoadPronunciation(_words[_currentWordIdx + 1]);
+            //}
 
             UpdateUi();
         }
@@ -100,10 +100,10 @@ namespace VocabManager
             PlayPronunciation(_currentWord);
 
             // Temporary way: Pre-load the next word to prevent lagging
-            if (_words.Count > _currentWordIdx + 1)
-            {
-                PreLoadPronunciation(_words[_currentWordIdx + 1]);
-            }
+            //if (_words.Count > _currentWordIdx + 1)
+            //{
+            //    PreLoadPronunciation(_words[_currentWordIdx + 1]);
+            //}
 
             return true;
         }

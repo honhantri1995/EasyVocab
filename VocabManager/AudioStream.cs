@@ -12,9 +12,7 @@ namespace VocabManager
         {
             try
             {
-                // Ensure modern TLS for HTTPS
-                ServicePointManager.SecurityProtocol =
-                    SecurityProtocolType.Tls12 ;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 // 1) Download the MP3 fully into memory
                 using var ms = new MemoryStream();
@@ -32,7 +30,7 @@ namespace VocabManager
                 // 3) Create a buffered provider to hold decoded PCM
                 var bufferedProvider = new BufferedWaveProvider(pcmFormat)
                 {
-                    BufferDuration = TimeSpan.FromSeconds(5), // generous buffer
+                    BufferDuration = TimeSpan.FromSeconds(5),
                     DiscardOnBufferOverflow = true
                 };
 
@@ -56,15 +54,37 @@ namespace VocabManager
                 using var playbackDone = new AutoResetEvent(false);
 
                 waveOut.Init(bufferedProvider);
-                waveOut.PlaybackStopped += (s, e) => playbackDone.Set();
+                waveOut.PlaybackStopped += (s, e) =>
+                {
+                    Console.WriteLine("Playback stopped.");
+                    playbackDone.Set();
+                };
+
+                Console.WriteLine("Starting playback...");
                 waveOut.Play();
 
                 // Wait until playback finishes
                 playbackDone.WaitOne();
+
+                // Ensure device is released
+                waveOut.Stop();
+                Thread.Sleep(100); // allow OS to release audio device
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Playback error: " + ex.Message);
+                Console.WriteLine("⚠️ Playback error: " + ex.Message);
+
+                // Optional retry logic
+                Thread.Sleep(200);
+                Console.WriteLine("Retrying playback...");
+                try
+                {
+                    Play(url); // recursive retry once
+                }
+                catch (Exception retryEx)
+                {
+                    Console.WriteLine("❌ Retry failed: " + retryEx.Message);
+                }
             }
         }
     }
